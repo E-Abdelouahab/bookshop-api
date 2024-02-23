@@ -11,11 +11,13 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use ApiPlatform\Serializer\Filter\PropertyFilter;
 use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Builder\Property;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ApiResource(
@@ -29,6 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
     ]
 )]
 ##[ApiFilter(BooleanFilter::class, properties: ['title'])]
+#[ApiFilter(SearchFilter::class, properties: ['author.id' =>'partial'])]
 class Book
 {
     #[ORM\Id]
@@ -52,6 +55,7 @@ class Book
 
     #[ORM\ManyToOne(inversedBy: 'Book')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiFilter(SearchFilter::class, strategy:'exact')]
     private ?Author $author = null;
 
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'book')]
