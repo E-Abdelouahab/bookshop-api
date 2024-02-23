@@ -55,7 +55,7 @@ class Book
 
     #[ORM\ManyToOne(inversedBy: 'Book')]
     #[ORM\JoinColumn(nullable: false)]
-    #[ApiFilter(SearchFilter::class, strategy:'exact')]
+    // #[ApiFilter(SearchFilter::class, strategy:'exact')]
     private ?Author $author = null;
 
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'book')]
